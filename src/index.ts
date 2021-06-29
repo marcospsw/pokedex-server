@@ -1,6 +1,5 @@
 import express from 'express';
 import cors from 'cors';
-import consign from 'consign';
 import routes from './routes';
 
 const app = express();
