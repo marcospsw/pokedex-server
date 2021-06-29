@@ -4,11 +4,11 @@
   "description": "Pokedex com Angular e Node",
   "repository": "https://github.com/marcospsw/pokedex-server.git",
   "author": "Marcos Wergles",
-  "main": "dist/index.js",
+  "main": "dist/server.js",
   "license": "MIT",
   "scripts": {
-    "start": "nodemon src/index.ts",
-    "dist": "tsc && node dist/index.js"
+    "start": "nodemon src/server.ts",
+    "dist": "tsc && node dist/server.js"
   },
   "dependencies": {
     "axios": "^0.21.1",
