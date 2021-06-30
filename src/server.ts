@@ -4,6 +4,7 @@ import routes from './routes';
 import { errors } from 'celebrate';
 import AppError from './utils/error';
 import 'dotenv/config';
+import bodyParser from 'body-parser';
 
 
 const app = express();

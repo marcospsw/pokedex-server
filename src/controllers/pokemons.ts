@@ -6,9 +6,15 @@ const pokemonsRouter = Router();
 
 pokemonsRouter.get(
   '/', async (req, res) => {
+    const { url } = req.query;
+    // const stringUrl = url.toString();
+    // const stringOffset = offset.toString();
+    // const stringLimit = limit.toString();
+    // const totalUrl = stringUrl.concat(stringOffset, stringLimit);
+
     async function getPokemons(){
       // let { data } = await axios('https://pokeapi.co/api/v2/pokemon/?offset=0&limit=898');
-      const { data } = await axios.get('https://pokeapi.co/api/v2/pokemon/?offset=0&limit=50');
+      const { data } = await axios.get(`${url}`);
       const pokemons = data.results;
       return {
         pokemons,
