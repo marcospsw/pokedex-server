@@ -29,5 +29,5 @@ app.use((err: Error, request: Request, response: Response, _: NextFunction) => {
   });
 });
 
-const port = process.env.SERVER_PORT || 4000;
-app.listen(port, () => console.log(`🚀🚀🚀Servidor rodando na porta ${port}🚀🚀🚀`));
+
+app.listen((process.env.PORT || 4000), () => console.log(`🚀🚀🚀Servidor rodando na porta ${(process.env.PORT || 4000)}🚀🚀🚀`));
