@@ -7,8 +7,7 @@
   "main": "dist/server.js",
   "license": "MIT",
   "scripts": {
-    "start": "node src/server.ts",
-    "dev": "nodemon src/server.ts",
+    "start": "nodemon src/server.ts",
     "dist": "tsc && node dist/server.js"
   },
   "dependencies": {
