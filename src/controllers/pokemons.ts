@@ -24,11 +24,14 @@ pokemonsRouter.get(
   
     async function getPokemon(url: string) {
       const { data } = await axios.get(url);
+
       return {
         url,
         id: data.id,
         name: data.name,
-        sprite: data.sprites.other['official-artwork'].front_default,
+        sprite: data.sprites.other.dream_world.front_default 
+          ? data.sprites.other.dream_world.front_default 
+          : data.sprites.other['official-artwork'].front_default,
         types: data.types,
       };
     }
