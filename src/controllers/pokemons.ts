@@ -125,7 +125,7 @@ pokemonsRouter.get(
     try {
       const pokemons = await getPokemons();
       const filteredPokemons = pokemons.map((pokemon: CompletePokemon) => {
-        if(isNaN(isNumber) && pokemon.name.includes(valor)){
+        if(isNaN(isNumber) && pokemon.name.includes(valor.toLowerCase())){
           return pokemon;
         }
         const last4Numbers = pokemon.url.slice(-4);
