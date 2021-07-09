@@ -195,7 +195,7 @@ pokemonsRouter.get('/id', async (req, res) => {
       const { data } = await axios.get(item.type.url);
       return {
         name: item.type.name,
-        weaknes: data.damage_relations.double_damage_from,
+        weaknesses: data.damage_relations.double_damage_from,
         advantages: data.damage_relations.double_damage_to,
       }
     }));
