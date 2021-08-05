@@ -56,12 +56,25 @@ userRouter.post('/', async (req, res) => {
 	}
 });
 
-userRouter.get('/', AuthMidleware, async (req, res) => {
+userRouter.get('/exists', async (req, res) => {
+	const user = req.query.userEmail.toString();
+	let userExist = await userModel.findOne({ email: user });
+
+	if (userExist) {
+		return res.status(200).json(true);
+	}
+
+	return res.status(200).json(false);
+});
+
+userRouter.get('/', async (req, res) => {
 	const users = await userModel.find();
+
+	const usersArray = users.map((user) => ({ name: user.name, email: user.email }));
 
 	return res.status(200).json({
 		error: false,
-		users,
+		usersArray,
 	});
 });
 

@@ -1,4 +1,4 @@
-import { Router } from 'express';
+import { request, Router } from 'express';
 import userModel from '../models/user';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
@@ -25,6 +25,15 @@ loginRouter.post('/', async (req, res) => {
 		});
 	}
 
+	const tokenUser = {
+		id: user._id,
+		name: user.name,
+		email: user.email,
+		avatar: user.avatar,
+	};
+
+	const token = jwt.sign(tokenUser, config.secret, { expiresIn: config.expiresIn });
+
 	return res.status(200).json({
 		error: false,
 		user: {
@@ -32,13 +41,7 @@ loginRouter.post('/', async (req, res) => {
 			email: user.email,
 			avatar: user.avatar,
 		},
-		token: jwt.sign(
-			{
-				id: user._id,
-			},
-			config.secret,
-			{ expiresIn: config.expiresIn }
-		),
+		token,
 	});
 });
 
