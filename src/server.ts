@@ -3,12 +3,15 @@ import cors from 'cors';
 import routes from './routes';
 import { errors } from 'celebrate';
 import AppError from './utils/error';
+import morgan from 'morgan';
 import 'dotenv/config';
+import './config/connection';
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(routes);
+app.use(morgan('dev'));
 app.use(errors());
 
 app.use((err: Error, request: Request, response: Response, _: NextFunction) => {
