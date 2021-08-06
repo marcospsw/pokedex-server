@@ -23,6 +23,12 @@ const AuthMidleware = async (req, res, next) => {
 				code: 130,
 				message: 'Token expirado!',
 			});
+		} else if (decoded.id !== req.body.id) {
+			return res.status(401).json({
+				error: true,
+				code: 130,
+				message: 'Erro de token!',
+			});
 		} else {
 			req.user_id = decoded.id;
 			next();

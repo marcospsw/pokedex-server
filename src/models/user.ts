@@ -12,7 +12,7 @@ const UserSchema = new mongoose.Schema<User>(
 		name: { type: String, required: true },
 		email: { type: String, required: true },
 		password: { type: String, required: true },
-		avatar: String,
+		avatar: { type: String, default: null },
 	},
 	{
 		timestamps: true,

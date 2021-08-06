@@ -3,6 +3,8 @@ import userModel from '../models/user';
 import bcrypt from 'bcryptjs';
 import * as yup from 'yup';
 import AuthMidleware from '../midlewares/AuthMidleware';
+import { config } from '../config/auth';
+import jwt from 'jsonwebtoken';
 
 const userRouter = Router();
 
@@ -11,7 +13,11 @@ userRouter.post('/', async (req, res) => {
 		name: yup.string().required(),
 		email: yup.string().required().email(),
 		password: yup.string().required().min(8),
-		avatar: yup.string().required(),
+		passwordConfirmation: yup
+			.string()
+			.required()
+			.oneOf([yup.ref('password')]),
+		avatar: yup.string().nullable(),
 	});
 
 	if (!(await schema.isValid(req.body))) {
@@ -75,6 +81,64 @@ userRouter.get('/', async (req, res) => {
 	return res.status(200).json({
 		error: false,
 		usersArray,
+	});
+});
+
+userRouter.post('/edit', AuthMidleware, async (req, res) => {
+	let schema = yup.object().shape({
+		id: yup.string().required(),
+		name: yup.string().required(),
+		email: yup.string().required().email(),
+		oldPassword: yup.string().required(),
+		newPassword: yup.string(),
+		newPasswordConfirmation: yup.string().oneOf([yup.ref('newPassword')]),
+		avatar: yup.string().nullable(),
+	});
+
+	if (!(await schema.isValid(req.body))) {
+		return res.status(400).json({
+			error: true,
+			message: 'Edição Invalida!',
+		});
+	}
+
+	const { id, name, email, oldPassword, newPassword, avatar } = req.body;
+	const user = await userModel.findOne({ _id: id });
+	let userExist = await userModel.findOne({ email });
+	if (userExist && userExist.email !== user.email) {
+		return res.status(400).json({
+			error: true,
+			message: 'E-mail ja cadastrado!',
+		});
+	}
+
+	if (!(await bcrypt.compare(oldPassword, user.password))) {
+		return res.status(400).json({
+			error: true,
+			message: 'Senha incorreta!',
+		});
+	}
+
+	const password = newPassword ? await bcrypt.hash(newPassword, 8) : await bcrypt.hash(oldPassword, 8);
+
+	await userModel.updateOne({ _id: id }, { name, email, password, avatar });
+	const newUser = await userModel.findOne({ _id: id });
+
+	newUser.password = undefined;
+
+	const tokenUser = {
+		id: newUser._id,
+		name: newUser.name,
+		email: newUser.email,
+		avatar: newUser.avatar,
+	};
+
+	const token = jwt.sign(tokenUser, config.secret, { expiresIn: config.expiresIn });
+
+	return res.status(200).json({
+		error: false,
+		user: newUser,
+		token,
 	});
 });
 
